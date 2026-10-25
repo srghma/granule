@@ -1,4 +1,5 @@
-packages: ./granule.cabal
+packages:
+  .
 
 allow-newer: optparse-applicative
 

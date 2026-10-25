@@ -18,7 +18,7 @@
       imports = [ inputs.haskell-flake.flakeModule ];
 
       perSystem = { self', pkgs, config, ... }: {
-        packages.default = self'.packages.granule-repl;
+        packages.default = self'.packages.granule;
 
         # TODO shame I have to create a full derivation for this, I'd like to
         # just copy files with a name. alas
@@ -33,12 +33,22 @@
         };
 
         packages.granule-repl-with-stdlib = pkgs.writeShellScriptBin "grepl" ''
-          ${self'.packages.granule-repl}/bin/grepl \
+          ${self'.packages.granule}/bin/grepl \
             --include-path ${self'.packages.granule-stdlib} \
             $@
         '';
 
+        devShells.default = pkgs.mkShell {
+          packages = [
+            pkgs.haskell.compiler.ghc948
+            pkgs.cabal-install
+            pkgs.z3
+            pkgs.zlib
+          ];
+        };
+
         haskellProjects.default = {
+          devShell.enable = false;
           ## local configuration
           # TODO 2023-07-20 raehik: tests access files outside directory
           settings.granule-interpreter.check = false;

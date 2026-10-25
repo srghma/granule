@@ -1,0 +1,13 @@
+data List a = Nil | Cons Int a (List a)
+
+length_list : forall {a : Type} . List (a [0]) -> Int
+length_list xs =
+  let
+    -- Helper function with an accumulator (acc : Int)
+    aux : List (a [0]) -> Int -> Int
+    aux list acc =
+      case list of
+        Empty         -> acc;
+        (Next [_] xs) -> aux xs (acc + 1)
+  in
+    aux xs 0
